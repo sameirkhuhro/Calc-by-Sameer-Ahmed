@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calc by Sameer Ahmed | Econ, CS & Data Science Toolkit</title>
+  <meta name="description" content="Calc by Sameer Ahmed — An interdisciplinary Economics, Computer Science, and Data Science web application featuring AP & GP Calculator, Simple Calculator, University GPA Predictor, and Pakistan Rural Flood & Farm Loss Calculator." />
+  <meta name="author" content="Sameer Ahmed" />
+  <meta property="og:title" content="Calc by Sameer Ahmed" />
+  <meta property="og:description" content="AP & GP Series Calculator, Simple Calculator, University GPA Calculator, and Pakistan Rural Flood & Farm Loss Economic Model." />
+  <meta property="og:type" content="website" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .hidden-section {
+      display: none;
+    }
+    input[type="range"] {
+      accent-color: #92400e;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col justify-between">
+
+  <!-- TOP HEADER -->
+  <header class="w-full border-b border-indigo-200 bg-indigo-50/70 py-4 px-6">
+    <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <h1 class="text-xl font-bold tracking-tight text-slate-900">Calc by Sameer Ahmed</h1>
+      <div id="user-badge" class="hidden text-xs font-medium text-slate-700 bg-indigo-100/80 border border-indigo-200 px-3 py-1 rounded"></div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8">
+
+    <!-- PAGE 0: ENTRY / ACCESS SCREEN -->
+    <section id="entry-screen" class="bg-indigo-50/50 border border-indigo-200 rounded-md p-6 md:p-8 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-indigo-200 pb-5 mb-6">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 leading-snug">
+            Enter your details to get an access PIN or skip and go to the calculator
+          </h2>
+          <p class="text-xs text-slate-600 mt-1">
+            Fill in your academic details and enter PIN <strong>1234</strong> below, or use Guest mode on the right.
+          </p>
+        </div>
+
+        <!-- Square Light Purple Guest Mode Button -->
+        <button
+          type="button"
+          onclick="enterGuestMode()"
+          class="w-24 h-24 shrink-0 border-2 border-purple-700 bg-purple-200 hover:bg-purple-300 text-slate-900 font-bold text-sm flex items-center justify-center text-center p-2 cursor-pointer transition-colors"
+        >
+          Guest mode
+        </button>
+      </div>
+
+      <form id="details-form" onsubmit="handleDetailsSubmit(event)" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Full Name -->
+          <div class="bg-indigo-100/50 border border-indigo-200 rounded p-3.5">
+            <label for="fullName" class="block text-sm font-semibold text-slate-900 mb-1">Full Name</label>
+            <input
+              type="text"
+              id="fullName"
+              required
+              placeholder="Enter your full name"
+              class="w-full border border-indigo-300 bg-white rounded px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-600"
+            />
+            <p class="text-xs text-slate-600 mt-1">Instruction: Enter your full legal or student name.</p>
+          </div>
+
+          <!-- Email -->
+          <div class="bg-indigo-100/50 border border-indigo-200 rounded p-3.5">
+            <label for="email" class="block text-sm font-semibold text-slate-900 mb-1">Email</label>
+            <input
+              type="email"
+              id="email"
+              required
+              placeholder="Enter your email address"
+              class="w-full border border-indigo-300 bg-white rounded px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-600"
+            />
+            <p class="text-xs text-slate-600 mt-1">Instruction: Enter an active university or personal email address.</p>
+          </div>
+
+          <!-- University -->
+          <div class="bg-indigo-100/50 border border-indigo-200 rounded p-3.5">
+            <label for="university" class="block text-sm font-semibold text-slate-900 mb-1">University</label>
+            <select
+              id="university"
+              required
+              class="w-full border border-indigo-300 bg-white rounded px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-600"
+            >
+              <option value="LUMS">LUMS</option>
+              <option value="AKU">AKU</option>
+              <option value="JSMU">JSMU</option>
+              <option value="IBA">IBA</option>
+              <option value="Other">Other</option>
+            </select>
+            <p class="text-xs text-slate-600 mt-1">Instruction: Select your institution or Other.</p>
+          </div>
+
+          <!-- Semester -->
+          <div class="bg-indigo-100/50 border border-indigo-200 rounded p-3.5">
+            <label for="semester" class="block text-sm font-semibold text-slate-900 mb-1">Semester</label>
+            <input
+              type="text"
+              id="semester"
+              required
+              placeholder=""
+              class="w-full border border-indigo-300 bg-white rounded px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-600"
+            />
+            <p class="text-xs text-slate-600 mt-1">Instruction: Type your current semester (e.g., Fall 2026 or 1st Semester).</p>
+          </div>
+
+          <!-- Required Access PIN -->
+          <div class="md:col-span-2 bg-indigo-100/50 border border-indigo-200 rounded p-3.5">
+            <label for="accessPinInput" class="block text-sm font-semibold text-slate-900 mb-1">Access PIN (Required)</label>
+            <input
+              type="text"
+              id="accessPinInput"
+              required
+              placeholder="Enter PIN (Must be 1234)"
+              class="w-full border border-indigo-300 bg-white rounded px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-600"
+            />
+            <p class="text-xs text-slate-600 mt-1">Instruction: PIN is always 1234.</p>
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center gap-3">
+          <button
+            type="submit"
+            class="border border-indigo-800 bg-indigo-700 hover:bg-indigo-800 text-white text-sm font-semibold px-5 py-2 rounded cursor-pointer transition-colors"
+          >
+            Enter
+          </button>
+          <span class="text-xs text-slate-600">Validates PIN 1234 and opens the calculators.</span>
+        </div>
+      </form>
+    </section>
+
+    <!-- CALCULATOR WORKSPACE (HIDDEN INITIALLY) -->
+    <section id="workspace-screen" class="hidden-section space-y-6">
+
+      <!-- Access PIN / Mode Banner -->
+      <div id="access-banner" class="bg-indigo-50 border border-indigo-200 rounded p-3 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <span id="access-status-text" class="text-slate-800 font-medium"></span>
+        <button
+          type="button"
+          onclick="returnToEntry()"
+          class="underline text-indigo-800 hover:text-indigo-950 font-medium cursor-pointer"
+        >
+          Change Details / Back to Entry
+        </button>
+      </div>
+
+      <!-- 4 Ordered Folder Tabs: 1. AP/GP -> 2. Simple -> 3. GPA -> 4. Economic -->
+      <nav class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2" aria-label="Calculator Views">
+        <button
+          type="button"
+          id="tab-apgp"
+          onclick="switchTab('apgp')"
+          class="border border-sky-300 bg-sky-200 text-slate-900 text-sm font-semibold py-2.5 px-3 text-left rounded transition-colors cursor-pointer"
+        >
+          1. AP / GP Calculator
+        </button>
+        <button
+          type="button"
+          id="tab-simple"
+          onclick="switchTab('simple')"
+          class="border border-violet-200 bg-violet-50 text-slate-800 text-sm font-semibold py-2.5 px-3 text-left rounded hover:bg-violet-100 transition-colors cursor-pointer"
+        >
+          2. Simple Calculator
+        </button>
+        <button
+          type="button"
+          id="tab-gpa"
+          onclick="switchTab('gpa')"
+          class="border border-emerald-200 bg-emerald-50 text-slate-800 text-sm font-semibold py-2.5 px-3 text-left rounded hover:bg-emerald-100 transition-colors cursor-pointer"
+        >
+          3. GPA Calculator
+        </button>
+        <button
+          type="button"
+          id="tab-econ"
+          onclick="switchTab('econ')"
+          class="border border-amber-200 bg-amber-50 text-slate-800 text-sm font-semibold py-2.5 px-3 text-left rounded hover:bg-amber-100 transition-colors cursor-pointer"
+        >
+          4. Economic Calculator
+        </button>
+      </nav>
+
+      <!-- FOLDER 1: AP / GP CALCULATOR -->
+      <div id="view-apgp" class="bg-sky-50/60 border border-sky-200 rounded-md p-6 shadow-sm space-y-6">
+        <div class="border-b border-sky-200 pb-4 bg-sky-100/70 p-4 rounded">
+          <h2 class="text-xl font-bold text-slate-900">AP / GP calculator</h2>
+          <p class="text-xs text-sky-900 mt-1">
+            find any terms or the sum of the series in AP and GP
+          </p>
+        </div>
+
+        <!-- ARITHMETIC PROGRESSION (AP) BOX -->
+        <div class="border border-sky-200 bg-sky-100/40 rounded p-5 space-y-4">
+          <div class="inline-block border border-sky-400 bg-sky-200/80 px-3.5 py-2">
+            <h3 class="text-sm font-bold text-slate-900">
+              Finding the 'nth' term of the Arithmetic series
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-sky-100/60 border border-sky-200 rounded p-3">
+              <label for="ap-a" class="block text-xs font-semibold text-slate-800 mb-1">First Term (a)</label>
+              <input
+                type="number"
+                id="ap-a"
+                placeholder="Enter first term"
+                step="any"
+                class="w-full border border-sky-300 bg-white rounded px-3 py-2 text-sm text-slate-900"
+              />
+            </div>
+
+            <div class="bg-sky-100/60 border border-sky-200 rounded p-3">
+              <label for="ap-d" class="block text-xs font-semibold text-slate-800 mb-1">Common Difference (d)</label>
+              <input
+                type="number"
+                id="ap-d"
+                placeholder="Enter difference"
+                step="any"
+                class="w-full border border-sky-300 bg-white rounded px-3 py-2 text-sm text-slate-900"
+              />
+            </div>
+
+            <div class="bg-sky-100/60 border border-sky-200 rounded p-3">
+              <label for="ap-n" class="block text-xs font-semibold text-slate-800 mb-1">Term Position / Count (n)</label>
+              <input
+                type="number"
+                id="ap-n"
+                placeholder="Enter n"
+                min="1"
+                step="1"
+                class="w-full border border-sky-300 bg-white rounded px-3 py-2 text-sm text-slate-900"
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onclick="calculateAP()"
+              class="border border-sky-700 bg-sky-700 hover:bg-sky-800 text-white text-xs font-semibold px-4 py-2 rounded cursor-pointer"
+            >
+              Calculate AP
+            </button>
+            <button
+              type="button"
+              onclick="clearAP()"
+              class="border border-sky-300 bg-sky-100 hover:bg-sky-200 text-slate-800 text-xs font-semibold px-4 py-2 rounded cursor-pointer"
+            >
+              Clear data &amp; try another values
+            </button>
+          </div>
+
+          <!-- AP Output Note -->
+          <div class="bg-sky-100/80 border border-sky-200 rounded p-4 space-y-1.5 text-sm text-slate-900">
+            <p id="ap-term-note">Enter your values above and click <strong>Calculate AP</strong> to see the nth term.</p>
+            <p id="ap-sum-note">Enter your values above and click <strong>Calculate AP</strong> to see the sum of the series.</p>
+          </div>
+        </div>
+
+        <!-- GEOMETRIC PROGRESSION (GP) BOX -->
+        <div class="border border-sky-200 bg-sky-100/40 rounded p-5 space-y-4">
+          <div class="inline-block border border-sky-400 bg-sky-200/80 px-3.5 py-2">
+            <h3 class="text-sm font-bold text-slate-900">
+              Finding the 'nth' term of the Geometric series
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-sky-100/60 border border-sky-200 rounded p-3">
+              <label for="gp-a" class="block text-xs font-semibold text-slate-800 mb-1">First Term (a)</label>
+              <input
+                type="number"
+                id="gp-a"
+                placeholder="Enter first term"
+                step="any"
+                class="w-full border border-sky-300 bg-white rounded px-3 py-2 text-sm text-slate-900"
+              />
+            </div>
+
+            <div class="bg-sky-100/60 border border-sky-200 rounded p-3">
+              <label for="gp-r" class="block text-xs font-semibold text-slate-800 mb-1">Common Ratio (r)</label>
+              <input
+                type="number"
+                id="gp-r"
+                placeholder="Enter ratio"
+                step="any"
+                class="w-full border border-sky-300 bg-white rounded px-3 py-2 text-sm text-slate-900"
+              />
+            </div>
+
+            <div class="bg-sky-100/60 border border-sky-200 rounded p-3">
+              <label for="gp-n" class="block text-xs font-semibold text-slate-800 mb-1">Term Position / Count (n)</label>
+              <input
+                type="number"
+                id="gp-n"
+                placeholder="Enter n"
+                min="1"
+                step="1"
+                class="w-full border border-sky-300 bg-white rounded px-3 py-2 text-sm text-slate-900"
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onclick="calculateGP()"
+              class="border border-sky-700 bg-sky-700 hover:bg-sky-800 text-white text-xs font-semibold px-4 py-2 rounded cursor-pointer"
+            >
+              Calculate GP
+            </button>
+            <button
+              type="button"
+              onclick="clearGP()"
+              class="border border-sky-300 bg-sky-100 hover:bg-sky-200 text-slate-800 text-xs font-semibold px-4 py-2 rounded cursor-pointer"
+            >
+              Clear data &amp; try another values
+            </button>
+          </div>
+
+          <!-- GP Output Note -->
+          <div class="bg-sky-100/80 border border-sky-200 rounded p-4 space-y-1.5 text-sm text-slate-900">
+            <p id="gp-term-note">Enter your values above and click <strong>Calculate GP</strong> to see the nth term.</p>
+            <p id="gp-sum-note">Enter your values above and click <strong>Calculate GP</strong> to see the sum of the series.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOLDER 2: UNIQUE LIGHT PORCELAIN & LAVENDER SIMPLE CALCULATOR -->
+      <div id="view-simple" class="hidden-section bg-violet-50/70 border border-violet-200 rounded-md p-6 shadow-sm space-y-6">
+        <div class="border-b border-violet-200 pb-4 bg-violet-100/70 p-4 rounded space-y-1">
+          <h2 class="text-xl font-bold text-slate-900">Simple calculator</h2>
+          <div class="bg-violet-50 border border-violet-200 rounded p-2 text-xs text-violet-950 font-semibold mt-1">
+            Please input the values and select '=' to get result
+          </div>
+        </div>
+
+        <!-- Unique Two-Column Porcelain & Lavender Studio Calculator -->
+        <div class="max-w-md mx-auto bg-white border-2 border-violet-300 rounded-2xl p-5 shadow-md">
+          <!-- Soft Tinted Display Bar -->
+          <div class="bg-violet-50 border border-violet-200 rounded-xl p-4 mb-4 flex flex-col justify-between min-h-[84px]">
+            <div class="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider text-violet-600">
+              <span>Expression Tape</span>
+              <span>Calc Mode</span>
+            </div>
+            <div id="calc-expr" class="text-sm text-slate-600 font-mono text-right break-all mt-1">0</div>
+            <div id="calc-result" class="text-2xl font-bold font-mono text-violet-950 text-right mt-1">= 0</div>
+          </div>
+
+          <!-- Keypad Layout -->
+          <div class="grid grid-cols-5 gap-2 text-sm font-semibold">
+            <!-- Row 1 -->
+            <button type="button" onclick="calcPress('AC')" class="bg-violet-200 hover:bg-violet-300 text-violet-950 py-3 rounded-xl border border-violet-300 transition-colors cursor-pointer">Ac</button>
+            <button type="button" onclick="calcPress('7')" class="bg-slate-50 hover:bg-violet-50 text-slate-900 py-3 rounded-xl border border-slate-200 transition-colors cursor-pointer">7</button>
+            <button type="button" onclick="calcPress('8')" class="bg-slate-50 hover:bg-violet-50 text-slate-900 py-3 rounded-xl border border-slate-200 transition-colors cursor-pointer">8</button>
+            <button type="button" onclick="calcPress('9')" class="bg-slate-50 hover:bg-violet-50 text-slate-900 py-3 rounded-xl border border-slate-200 transition-colors cursor-pointer">9</button>
+            <button type="button" onclick="calcPress('/')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-900 py-3 rounded-xl border border-indigo-200 transition-colors cursor-pointer">÷</button>
+
+            <!-- Row 2 -->
+            <button type="button" onclick="calcPress('DEL')" class="bg-violet-100 hover:bg-violet-200 text-violet-900 py-3 rounded-xl border border-violet-200 transition-colors cursor-pointer">⌫</button>
+            <button type="button" onclick="calcPress('4')" class="bg-slate-50 hover:bg-violet-50 text-slate-900 py-3 rounded-xl border border-slate-200 transition-colors cursor-pointer">4</button>
+            <button type="button" onclick="calcPress('5')" class="bg-slate-50 hover:bg-violet-50 text-slate-900 py-3 rounded-xl border border-slate-200 transition-colors cursor-pointer">5</button>
+            <button type="button" onclick="calcPress('6')" class="bg-slate-50 hover:bg-violet-50 text-slate-900 py-3 rounded-xl border border-slate-200 transition-colors cursor-pointer">6</button>
+            <button type="button" onclick="calcPress('*')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-900 py-3 rounded-xl border border-indigo-200 transition-colors cursor-pointer">×</button>
+
+            <!-- Row 3 -->
+            <button type="button" onclick="calcPress('(')" class="bg-violet-50 hover:bg-violet-100 text-violet-800 py-3 rounded-xl border border-violet-200 transition-colors cursor-pointer">(</button>
+            <button type="button" onclick="calcPress('1')" class="bg-slate-50 hover:bg-violet-50 text-slate-900 py-3 rounded-xl border border-slate-200 transition-colors cursor-pointer">1</button>
+            <button type="button" onclick="calcPress('2')" class="bg-slate-50 hover:bg-violet-50 text-slate-900 py-3 rounded-xl border border-slate-200 transition-colors cursor-pointer">2</button>
+            <button type="button" onclick="calcPress('3')" class="bg-slate-50 hover:bg-violet-50 text-slate-900 py-3 rounded-xl border border-slate-200 transition-colors cursor-pointer">3</button>
+            <button type="button" onclick="calcPress('-')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-900 py-3 rounded-xl border border-indigo-200 transition-colors cursor-pointer">−</button>
+
+            <!-- Row 4 -->
+            <button type="button" onclick="calcPress(')')" class="bg-violet-50 hover:bg-violet-100 text-violet-800 py-3 rounded-xl border border-violet-200 transition-colors cursor-pointer">)</button>
+            <button type="button" onclick="calcPress('0')" class="bg-slate-50 hover:bg-violet-50 text-slate-900 py-3 rounded-xl border border-slate-200 transition-colors cursor-pointer">0</button>
+            <button type="button" onclick="calcPress('.')" class="bg-slate-50 hover:bg-violet-50 text-slate-900 py-3 rounded-xl border border-slate-200 transition-colors cursor-pointer">.</button>
+            <button type="button" onclick="calcPress('=')" class="bg-violet-700 hover:bg-violet-800 text-white py-3 rounded-xl border border-violet-800 transition-colors cursor-pointer">=</button>
+            <button type="button" onclick="calcPress('+')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-900 py-3 rounded-xl border border-indigo-200 transition-colors cursor-pointer">+</button>
+          </div>
+        </div>
+
+        <div class="text-center pt-2">
+          <button
+            type="button"
+            onclick="clearSimplePhone()"
+            class="border border-violet-300 bg-violet-100 hover:bg-violet-200 text-slate-800 text-xs font-semibold px-4 py-2 rounded cursor-pointer"
+          >
+            Clear data &amp; try another values
+          </button>
+        </div>
+      </div>
+
+      <!-- FOLDER 3: GPA CALCULATOR -->
+      <div id="view-gpa" class="hidden-section bg-emerald-50/60 border border-emerald-200 rounded-md p-6 shadow-sm space-y-6">
+        <div class="border-b border-emerald-200 pb-4 bg-emerald-100/70 p-4 rounded">
+          <h2 class="text-xl font-bold text-slate-900">GPA calculator</h2>
+          <p class="text-xs text-emerald-900 mt-1">
+            Add your courses and credit hours to predict your GPA
+          </p>
+        </div>
+
+        <div class="space-y-3">
+          <div class="hidden sm:grid sm:grid-cols-12 gap-3 text-xs font-semibold text-emerald-900 px-3 py-2 bg-emerald-100/60 border border-emerald-200 rounded">
+            <div class="col-span-5">Course Name</div>
+            <div class="col-span-3">Credit Hours (Integer)</div>
+            <div class="col-span-3">Grade</div>
+            <div class="col-span-1 text-right">Action</div>
+          </div>
+
+          <div id="courses-container" class="space-y-2.5"></div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onclick="calculateGPA()"
+              class="border border-emerald-800 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded cursor-pointer"
+            >
+              Calculate GPA
+            </button>
+            <button
+              type="button"
+              onclick="addCourseRow()"
+              class="border border-emerald-300 bg-emerald-100 hover:bg-emerald-200 text-emerald-950 text-xs font-semibold px-4 py-2 rounded cursor-pointer"
+            >
+              + Add Course
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onclick="resetCourses()"
+            class="border border-emerald-300 bg-emerald-100 hover:bg-emerald-200 text-slate-800 text-xs font-medium px-3 py-2 rounded cursor-pointer"
+          >
+            Clear data &amp; try another values
+          </button>
+        </div>
+
+        <!-- GPA Result Box -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div class="border border-emerald-200 bg-emerald-100/70 rounded p-4">
+            <span class="block text-xs text-emerald-900 font-medium">Total Credit Hours</span>
+            <span id="gpa-total-credits" class="text-2xl font-bold text-slate-900 mt-1 block">—</span>
+          </div>
+          <div class="border border-emerald-200 bg-emerald-100/70 rounded p-4">
+            <span class="block text-xs text-emerald-900 font-medium">Predicted Semester GPA (4.00 Scale)</span>
+            <span id="gpa-result" class="text-2xl font-bold text-slate-900 mt-1 block">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOLDER 4: ECONOMIC CALCULATOR -->
+      <div id="view-econ" class="hidden-section bg-amber-50/60 border border-amber-200 rounded-md p-6 shadow-sm space-y-6">
+        <div class="border-b border-amber-200 pb-4 bg-amber-100/70 p-4 rounded">
+          <h2 class="text-xl font-bold text-slate-900">Rural flood and farm loss calculator</h2>
+          <p class="text-xs text-amber-900 mt-1">
+            Estimates rural farm losses and village damages during floods.
+          </p>
+        </div>
+
+        <!-- Sliders & Inputs -->
+        <div class="space-y-4 bg-amber-100/40 border border-amber-200 rounded p-5">
+          <!-- Rural Region -->
+          <div class="bg-amber-100/60 border border-amber-200 rounded p-3.5">
+            <label for="rural-region" class="block text-sm font-semibold text-slate-900 mb-1">
+              Rural Region
+            </label>
+            <select
+              id="rural-region"
+              class="w-full sm:w-80 border border-amber-300 bg-white rounded px-3 py-2 text-sm text-slate-900"
+            >
+              <option value="sindh">Rural Sindh</option>
+              <option value="punjab">South Punjab</option>
+              <option value="kp">KP Villages</option>
+              <option value="balochistan">Balochistan</option>
+            </select>
+          </div>
+
+          <!-- Extra Monsoon Rain (%) -->
+          <div class="bg-amber-100/60 border border-amber-200 rounded p-3.5">
+            <div class="flex justify-between text-sm font-semibold text-slate-900 mb-1">
+              <label for="rain-slider">Extra Monsoon Rain (%)</label>
+              <span id="rain-val" class="text-amber-900">120%</span>
+            </div>
+            <input
+              type="range"
+              id="rain-slider"
+              min="10"
+              max="300"
+              value="120"
+              oninput="updateSliderLabels()"
+              class="w-full cursor-pointer"
+            />
+          </div>
+
+          <!-- Farm & Crop Damage (%) -->
+          <div class="bg-amber-100/60 border border-amber-200 rounded p-3.5">
+            <div class="flex justify-between text-sm font-semibold text-slate-900 mb-1">
+              <label for="crop-slider">Farm &amp; Crop Damage (%)</label>
+              <span id="crop-val" class="text-amber-900">45%</span>
+            </div>
+            <input
+              type="range"
+              id="crop-slider"
+              min="5"
+              max="100"
+              value="45"
+              oninput="updateSliderLabels()"
+              class="w-full cursor-pointer"
+            />
+          </div>
+
+          <div class="pt-1">
+            <button
+              type="button"
+              onclick="calculateFloodLoss()"
+              class="border border-amber-800 bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold px-4 py-2 rounded cursor-pointer"
+            >
+              Calculate Flood &amp; Farm Loss
+            </button>
+          </div>
+        </div>
+
+        <!-- Result Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="border border-amber-200 bg-amber-100/70 rounded p-4">
+            <span class="block text-xs font-semibold text-slate-900">Farm &amp; Rural Money Lost</span>
+            <span class="block text-[11px] text-amber-900 mb-2">(Total economic loss)</span>
+            <span id="econ-money-lost" class="text-xl font-bold text-slate-900">—</span>
+          </div>
+
+          <div class="border border-amber-200 bg-amber-100/70 rounded p-4">
+            <span class="block text-xs font-semibold text-slate-900">Villagers Forced from Homes</span>
+            <span class="block text-[11px] text-amber-900 mb-2">(Displaced rural families)</span>
+            <span id="econ-displaced" class="text-xl font-bold text-slate-900">—</span>
+          </div>
+
+          <div class="border border-amber-200 bg-amber-100/70 rounded p-4">
+            <span class="block text-xs font-semibold text-slate-900">Cost to Rebuild Villages</span>
+            <span class="block text-[11px] text-amber-900 mb-2">(Homes, roads, and canals)</span>
+            <span id="econ-rebuild" class="text-xl font-bold text-slate-900">—</span>
+          </div>
+        </div>
+
+        <!-- Breakdown & Takeaway -->
+        <div class="border border-amber-200 bg-amber-100/50 rounded p-4 space-y-3 text-sm">
+          <div>
+            <h3 class="font-bold text-slate-900 mb-1">Biggest Hits in Rural Areas:</h3>
+            <ul class="list-disc list-inside text-slate-800 space-y-1 text-xs sm:text-sm">
+              <li>Lost Crops &amp; Livestock</li>
+              <li>Damaged Mud Homes &amp; Roads</li>
+              <li>Higher Food Prices in Villages</li>
+            </ul>
+          </div>
+
+          <div class="border-t border-amber-200 pt-3">
+            <p class="text-xs sm:text-sm text-slate-900 leading-relaxed">
+              <strong>What This Shows:</strong> When floods hit rural areas, farmers lose their crops and animals first, which cuts family income and pushes up food prices.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER ON EVERY PAGE -->
+  <footer class="w-full border-t border-indigo-200 bg-indigo-50/70 py-4 px-6 mt-8">
+    <div class="max-w-4xl mx-auto text-center text-xs font-semibold text-slate-800">
+      Calc by Sameer Ahmed
+    </div>
+  </footer>
+
+  <!-- APPLICATION LOGIC -->
+  <script>
+    // --- ENTRY & NAVIGATION ---
+    function handleDetailsSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById("fullName").value.trim();
+      const university = document.getElementById("university").value;
+      const semester = document.getElementById("semester").value.trim();
+      const enteredPin = document.getElementById("accessPinInput").value.trim();
+
+      if (enteredPin !== "1234") {
+        alert("Incorrect PIN! Access PIN must be 1234.");
+        return;
+      }
+
+      document.getElementById("entry-screen").classList.add("hidden-section");
+      document.getElementById("workspace-screen").classList.remove("hidden-section");
+
+      const badge = document.getElementById("user-badge");
+      badge.textContent = `${name} | ${university} (${semester}) | PIN: 1234`;
+      badge.classList.remove("hidden");
+
+      document.getElementById("access-status-text").textContent =
+        `Access PIN Issued: #1234 — Welcome, ${name} (${university}, ${semester})`;
+    }
+
+    function enterGuestMode() {
+      document.getElementById("entry-screen").classList.add("hidden-section");
+      document.getElementById("workspace-screen").classList.remove("hidden-section");
+
+      const badge = document.getElementById("user-badge");
+      badge.textContent = "On Guest Mode";
+      badge.classList.remove("hidden");
+
+      document.getElementById("access-status-text").textContent = "On Guest Mode";
+    }
+
+    function returnToEntry() {
+      document.getElementById("workspace-screen").classList.add("hidden-section");
+      document.getElementById("entry-screen").classList.remove("hidden-section");
+      document.getElementById("user-badge").classList.add("hidden");
+    }
+
+    function switchTab(tabName) {
+      const tabs = {
+        apgp: {
+          btn: document.getElementById("tab-apgp"),
+          view: document.getElementById("view-apgp"),
+          active: "border border-sky-400 bg-sky-200 text-slate-900 text-sm font-semibold py-2.5 px-3 text-left rounded transition-colors cursor-pointer",
+          inactive: "border border-sky-200 bg-sky-50 text-slate-800 text-sm font-semibold py-2.5 px-3 text-left rounded hover:bg-sky-100 transition-colors cursor-pointer"
+        },
+        simple: {
+          btn: document.getElementById("tab-simple"),
+          view: document.getElementById("view-simple"),
+          active: "border border-violet-400 bg-violet-200 text-slate-900 text-sm font-semibold py-2.5 px-3 text-left rounded transition-colors cursor-pointer",
+          inactive: "border border-violet-200 bg-violet-50 text-slate-800 text-sm font-semibold py-2.5 px-3 text-left rounded hover:bg-violet-100 transition-colors cursor-pointer"
+        },
+        gpa: {
+          btn: document.getElementById("tab-gpa"),
+          view: document.getElementById("view-gpa"),
+          active: "border border-emerald-400 bg-emerald-200 text-slate-900 text-sm font-semibold py-2.5 px-3 text-left rounded transition-colors cursor-pointer",
+          inactive: "border border-emerald-200 bg-emerald-50 text-slate-800 text-sm font-semibold py-2.5 px-3 text-left rounded hover:bg-emerald-100 transition-colors cursor-pointer"
+        },
+        econ: {
+          btn: document.getElementById("tab-econ"),
+          view: document.getElementById("view-econ"),
+          active: "border border-amber-400 bg-amber-200 text-slate-900 text-sm font-semibold py-2.5 px-3 text-left rounded transition-colors cursor-pointer",
+          inactive: "border border-amber-200 bg-amber-50 text-slate-800 text-sm font-semibold py-2.5 px-3 text-left rounded hover:bg-amber-100 transition-colors cursor-pointer"
+        }
+      };
+
+      Object.keys(tabs).forEach((key) => {
+        if (key === tabName) {
+          tabs[key].view.classList.remove("hidden-section");
+          tabs[key].btn.className = tabs[key].active;
+        } else {
+          tabs[key].view.classList.add("hidden-section");
+          tabs[key].btn.className = tabs[key].inactive;
+        }
+      });
+    }
+
+    // --- ORDINAL HELPER ---
+    function getOrdinal(n) {
+      const num = Math.abs(Math.floor(n));
+      const mod100 = num % 100;
+      if (mod100 >= 11 && mod100 <= 13) return num + "th";
+      switch (num % 10) {
+        case 1: return num + "st";
+        case 2: return num + "nd";
+        case 3: return num + "rd";
+        default: return num + "th";
+      }
+    }
+
+    function formatNumber(val) {
+      if (!isFinite(val)) return "Undefined";
+      return Number.isInteger(val) ? val.toString() : val.toFixed(4).replace(/\.?0+$/, "");
+    }
+
+    // --- 1. AP & GP CALCULATOR ---
+    function calculateAP() {
+      const a = parseFloat(document.getElementById("ap-a").value);
+      const d = parseFloat(document.getElementById("ap-d").value);
+      const n = parseInt(document.getElementById("ap-n").value, 10);
+
+      if (isNaN(a) || isNaN(d) || isNaN(n) || n < 1) {
+        document.getElementById("ap-term-note").innerHTML = "Please enter valid values (n ≥ 1) to find the term.";
+        document.getElementById("ap-sum-note").innerHTML = "Please enter valid values (n ≥ 1) to find the sum.";
+        return;
+      }
+
+      const nthTerm = a + (n - 1) * d;
+      const sumSeries = (n / 2) * (2 * a + (n - 1) * d);
+      const ord = getOrdinal(n);
+
+      document.getElementById("ap-term-note").innerHTML =
+        `The ${ord} term of the series is <strong>${formatNumber(nthTerm)}</strong>.`;
+      document.getElementById("ap-sum-note").innerHTML =
+        `The sum of the series of the ${n} ${n === 1 ? "value" : "values"} is <strong>${formatNumber(sumSeries)}</strong>.`;
+    }
+
+    function clearAP() {
+      document.getElementById("ap-a").value = "";
+      document.getElementById("ap-d").value = "";
+      document.getElementById("ap-n").value = "";
+      document.getElementById("ap-term-note").innerHTML = "Cleared. Enter new values above and click <strong>Calculate AP</strong>.";
+      document.getElementById("ap-sum-note").innerHTML = "Cleared. Enter new values above and click <strong>Calculate AP</strong>.";
+    }
+
+    function calculateGP() {
+      const a = parseFloat(document.getElementById("gp-a").value);
+      const r = parseFloat(document.getElementById("gp-r").value);
+      const n = parseInt(document.getElementById("gp-n").value, 10);
+
+      if (isNaN(a) || isNaN(r) || isNaN(n) || n < 1) {
+        document.getElementById("gp-term-note").innerHTML = "Please enter valid values (n ≥ 1) to find the term.";
+        document.getElementById("gp-sum-note").innerHTML = "Please enter valid values (n ≥ 1) to find the sum.";
+        return;
+      }
+
+      const nthTerm = a * Math.pow(r, n - 1);
+      const sumSeries = r === 1 ? a * n : a * (Math.pow(r, n) - 1) / (r - 1);
+      const ord = getOrdinal(n);
+
+      document.getElementById("gp-term-note").innerHTML =
+        `The ${ord} term of the series is <strong>${formatNumber(nthTerm)}</strong>.`;
+      document.getElementById("gp-sum-note").innerHTML =
+        `The sum of the series of the ${n} ${n === 1 ? "value" : "values"} is <strong>${formatNumber(sumSeries)}</strong>.`;
+    }
+
+    function clearGP() {
+      document.getElementById("gp-a").value = "";
+      document.getElementById("gp-r").value = "";
+      document.getElementById("gp-n").value = "";
+      document.getElementById("gp-term-note").innerHTML = "Cleared. Enter new values above and click <strong>Calculate GP</strong>.";
+      document.getElementById("gp-sum-note").innerHTML = "Cleared. Enter new values above and click <strong>Calculate GP</strong>.";
+    }
+
+    // --- 2. SIMPLE STUDIO CALCULATOR ---
+    let calcExpression = "";
+    let calcResValue = "= 0";
+
+    function calcPress(val) {
+      const exprEl = document.getElementById("calc-expr");
+      const resEl = document.getElementById("calc-result");
+
+      if (val === "AC") {
+        calcExpression = "";
+        calcResValue = "= 0";
+      } else if (val === "DEL") {
+        calcExpression = calcExpression.slice(0, -1);
+      } else if (val === "=") {
+        if (!calcExpression.trim()) return;
+        try {
+          let sanitized = calcExpression.replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-");
+          let evaluated = Function('"use strict";return (' + sanitized + ')')();
+          calcResValue = "= " + Number(evaluated.toFixed(4)).toLocaleString();
+        } catch (err) {
+          calcResValue = "= Invalid Expression";
+        }
+      } else {
+        calcExpression += val;
+      }
+
+      exprEl.textContent = calcExpression || "0";
+      resEl.textContent = calcResValue;
+    }
+
+    function clearSimplePhone() {
+      calcExpression = "";
+      calcResValue = "= 0";
+      document.getElementById("calc-expr").textContent = "0";
+      document.getElementById("calc-result").textContent = calcResValue;
+    }
+
+    // --- 3. GPA CALCULATOR ---
+    const gradePoints = {
+      "4.0": "A / A+ (4.00)",
+      "3.7": "A- (3.70)",
+      "3.3": "B+ (3.30)",
+      "3.0": "B (3.00)",
+      "2.7": "B- (2.70)",
+      "2.3": "C+ (2.30)",
+      "2.0": "C (2.00)",
+      "1.7": "C- (1.70)",
+      "1.0": "D (1.00)",
+      "0.0": "F (0.00)"
+    };
+
+    function addCourseRow(courseName = "", credits = 3, grade = "4.0") {
+      const container = document.getElementById("courses-container");
+      const row = document.createElement("div");
+      row.className = "grid grid-cols-1 sm:grid-cols-12 gap-3 items-center border border-emerald-200 bg-emerald-100/50 p-3 rounded course-row";
+
+      let optionsHtml = "";
+      for (const [val, label] of Object.entries(gradePoints)) {
+        optionsHtml += `<option value="${val}" ${val === grade ? "selected" : ""}>${label}</option>`;
+      }
+
+      row.innerHTML = `
+        <div class="sm:col-span-5">
+          <input
+            type="text"
+            placeholder="Course title (e.g., Microeconomics)"
+            value="${courseName}"
+            class="w-full border border-emerald-300 bg-white rounded px-3 py-1.5 text-sm text-slate-900"
+          />
+        </div>
+        <div class="sm:col-span-3">
+          <input
+            type="number"
+            min="1"
+            step="1"
+            value="${credits}"
+            placeholder="Credits (min 1)"
+            class="w-full border border-emerald-300 bg-white rounded px-3 py-1.5 text-sm text-slate-900 credit-input"
+          />
+        </div>
+        <div class="sm:col-span-3">
+          <select
+            class="w-full border border-emerald-300 bg-white rounded px-3 py-1.5 text-sm text-slate-900 grade-select"
+          >
+            ${optionsHtml}
+          </select>
+        </div>
+        <div class="sm:col-span-1 text-right">
+          <button
+            type="button"
+            onclick="removeCourseRow(this)"
+            class="text-xs text-slate-600 hover:text-slate-950 font-semibold px-2 py-1 cursor-pointer"
+            title="Remove course"
+          >
+            Remove
+          </button>
+        </div>
+      `;
+
+      container.appendChild(row);
+    }
+
+    function removeCourseRow(btn) {
+      const rows = document.querySelectorAll(".course-row");
+      if (rows.length > 1) {
+        btn.closest(".course-row").remove();
+      } else {
+        alert("At least 1 course is required.");
+      }
+    }
+
+    function resetCourses() {
+      const container = document.getElementById("courses-container");
+      container.innerHTML = "";
+      addCourseRow("", 3, "4.0");
+      document.getElementById("gpa-total-credits").textContent = "—";
+      document.getElementById("gpa-result").textContent = "—";
+    }
+
+    function calculateGPA() {
+      const rows = document.querySelectorAll(".course-row");
+      if (rows.length === 0) {
+        alert("At least 1 course is required.");
+        return;
+      }
+
+      let totalCredits = 0;
+      let totalQualityPoints = 0;
+
+      rows.forEach((row) => {
+        const credits = parseInt(row.querySelector(".credit-input").value, 10) || 0;
+        const grade = parseFloat(row.querySelector(".grade-select").value) || 0;
+        if (credits > 0) {
+          totalCredits += credits;
+          totalQualityPoints += credits * grade;
+        }
+      });
+
+      const gpa = totalCredits > 0 ? totalQualityPoints / totalCredits : 0;
+      document.getElementById("gpa-total-credits").textContent = totalCredits;
+      document.getElementById("gpa-result").textContent = gpa.toFixed(2);
+    }
+
+    // --- 4. RURAL FLOOD & FARM LOSS CALCULATOR ---
+    const regionMultipliers = {
+      sindh: { farmBase: 320, familyBase: 280000, infraBase: 210 },
+      punjab: { farmBase: 290, familyBase: 210000, infraBase: 175 },
+      kp: { farmBase: 140, familyBase: 130000, infraBase: 150 },
+      balochistan: { farmBase: 165, familyBase: 155000, infraBase: 185 }
+    };
+
+    function updateSliderLabels() {
+      const rainPct = document.getElementById("rain-slider").value;
+      const cropPct = document.getElementById("crop-slider").value;
+      document.getElementById("rain-val").textContent = `${rainPct}%`;
+      document.getElementById("crop-val").textContent = `${cropPct}%`;
+    }
+
+    function calculateFloodLoss() {
+      const regionKey = document.getElementById("rural-region").value;
+      const rainPct = parseFloat(document.getElementById("rain-slider").value);
+      const cropPct = parseFloat(document.getElementById("crop-slider").value);
+
+      updateSliderLabels();
+
+      const reg = regionMultipliers[regionKey];
+      const rainFactor = rainPct / 100;
+      const cropFactor = cropPct / 100;
+
+      const farmMoneyLost = Math.round(reg.farmBase * (0.4 * rainFactor + 0.8 * cropFactor));
+      const displacedFamilies = Math.round(reg.familyBase * (0.65 * rainFactor + 0.45 * cropFactor));
+      const rebuildCost = Math.round(reg.infraBase * (0.75 * rainFactor + 0.35 * cropFactor));
+
+      document.getElementById("econ-money-lost").textContent = `PKR ${farmMoneyLost.toLocaleString()} Billion`;
+      document.getElementById("econ-displaced").textContent = `${displacedFamilies.toLocaleString()} Families`;
+      document.getElementById("econ-rebuild").textContent = `PKR ${rebuildCost.toLocaleString()} Billion`;
+    }
+
+    // Initialize with 1 required course on page load
+    window.addEventListener("DOMContentLoaded", () => {
+      addCourseRow("Principles of Economics", 3, "4.0");
+    });
+  </script>
+</body>
+</html>
